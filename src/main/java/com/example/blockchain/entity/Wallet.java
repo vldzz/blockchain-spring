@@ -1,41 +1,55 @@
 package com.example.blockchain.entity;
 
+import com.example.blockchain.persistence.service.WalletService;
 import com.example.blockchain.util.Sha256;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-
 @AllArgsConstructor
+@Entity
 public class Wallet {
+    @Id
+    @Column(name = "wallet_id")
     private UUID id;
-
-    @Getter
-    private Agent agent;
 
     @Getter
     private String hash;
 
     @Getter
-    @Setter
     private double amount = 0;
 
-    private Wallet(){}
+    @Transient
+    private static WalletService walletService;
 
-    public static Wallet generateWallet(Agent agent) {
+    @OneToMany(targetEntity = Block.class, mappedBy = "wallet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Block> blocks = new ArrayList<>();
+
+    protected Wallet() {
+
+    }
+
+    public static Wallet generateWallet(WalletService walletService) {
         Wallet wallet = new Wallet();
         wallet.id = UUID.randomUUID();
-        wallet.agent = agent;
         wallet.hash = Sha256.applySha256(wallet.toString());
+        Wallet.walletService = walletService;
+
 
         return wallet;
     }
 
-    @Override
-    public String toString() {
-        return "id=" + id +
-                ", agent=" + agent.toString();
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+        walletService.save(this);
     }
+
+
 }

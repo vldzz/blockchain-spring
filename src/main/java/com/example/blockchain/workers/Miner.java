@@ -11,6 +11,7 @@ import com.example.blockchain.logger.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
@@ -24,18 +25,17 @@ public class Miner implements Runnable {
 
     public Miner(int id) {
         this.id = id;
+        Thread.currentThread().setName("thread-" + id);
     }
 
     @Override
     public void run() {
-        Thread.currentThread().setName("thread-" + id);
         try {
             while (Configs.MINE) {
                 Block next = mineBlock(generateNextBlock());
 
                 if (Configs.LOG == Log.INFO) {
-//                    Logger.log("Block mined: " + next.toString());
-                    Logger.logBlock(next);
+                    Logger.log(next, "Validated: ");
                 }
 
                 blockchain.addBlock(next);
@@ -50,7 +50,7 @@ public class Miner implements Runnable {
         Random random = new Random();
 
         if (Configs.LOG == Log.INFO) {
-            Logger.log("Validating block : " + block.toString());
+            Logger.log(block, "Validating:");
         }
 
         while (!isValid(block)) {
@@ -58,10 +58,17 @@ public class Miner implements Runnable {
 
             if (Configs.LOG == Log.MORE_INFO) {
                 Logger.log(isValid(block) + "-" + block.getMagicNum() + " - " + block.getHash());
-//                Logger.log(block.getMagicNum() + " - " + block.getHash());
             }
+
+            Optional<Block> lastBlock = blockchain.getLastBlock();
+            if (lastBlock.isPresent())
+                if (lastBlock.get().getId() == block.getId()) {
+                    block.setId(lastBlock.get().getId() + 1);
+                }
         }
+
         wallet.setAmount(wallet.getAmount() + 100);
+        block.setGeneratedTime(new Date().getTime());
         return block;
     }
 
@@ -69,7 +76,7 @@ public class Miner implements Runnable {
         return block.getHash().matches(numOfZeroRegex);
     }
 
-    private Block generateNextBlock() throws WalletNotSetException, BlockchainNotSetException, Exception {
+    private synchronized Block generateNextBlock() throws WalletNotSetException, BlockchainNotSetException, Exception {
         if (wallet == null) {
             throw new WalletNotSetException();
         }
