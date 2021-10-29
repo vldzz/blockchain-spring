@@ -43,7 +43,7 @@ public class Blockchain {
 //            return Optional.empty();
 //        }
 //        return Optional.of(blocks.get(blocks.size() - 1));
-        return blockService.findById(getLastId());
+        return blockService.findLast();
     }
 
 

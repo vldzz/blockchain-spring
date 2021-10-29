@@ -27,8 +27,8 @@ public class Block {
 
     private String prevHash;
 
-    @Transient
-    private String hash;
+//    @Transient
+//    private String hash;
     private int magicNum = 0;
 
     public Block() {

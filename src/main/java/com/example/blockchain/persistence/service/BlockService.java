@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Service
 public class BlockService {
-    BlockRepository blockRepository;
+    private BlockRepository blockRepository;
 
     public BlockService(BlockRepository blockRepository) {
         this.blockRepository = blockRepository;
@@ -24,5 +24,10 @@ public class BlockService {
 
     public void save(Block block) {
         blockRepository.save(block);
+    }
+
+
+    public Optional<Block> findLast() {
+        return blockRepository.findFirstByOrderByIdDesc();
     }
 }

@@ -32,11 +32,9 @@ public class BlockchainFacade {
                     miner.setWallet(wallet);
                     new Thread(miner).start();
                 }));
-
-
     }
 
     public static void stop() {
-
+        Configs.MINE = false;
     }
 }

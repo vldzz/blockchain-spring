@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BlockRepository extends CrudRepository<Block, Long> {
     Optional<Block> findById(long id);
+    Optional<Block> findFirstByOrderByIdDesc();
 }
