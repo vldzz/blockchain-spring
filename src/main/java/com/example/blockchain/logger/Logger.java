@@ -1,6 +1,7 @@
 package com.example.blockchain.logger;
 
 import com.example.blockchain.entity.Block;
+import com.example.blockchain.util.LogList;
 
 import java.time.LocalTime;
 
@@ -10,6 +11,7 @@ public class Logger {
     }
 
     public static void log(Block block, String message) {
+        LogList.getInstance().log(block, message);
         System.out.println(
                 threadColor(Thread.currentThread().getName()) +
                 "LOG: " +
@@ -45,6 +47,7 @@ public class Logger {
 
 
     public static void log(String e) {
+        LogList.getInstance().log(e);
         System.out.println(
                 Colors.Regular_Colors.RED + "LOG: " +
                         fillString(Thread.currentThread().getName(), 10) + "|   " +

@@ -5,7 +5,7 @@ public class Colors {
     public static final String RESET = "\033[0m";  // Text Reset
 
     // Regular Colors
-    class Regular_Colors {
+    public class Regular_Colors {
 
         public static final String BLACK = "\033[0;30m";   // BLACK
         public static final String RED = "\033[0;31m";     // RED
@@ -15,6 +15,17 @@ public class Colors {
         public static final String PURPLE = "\033[0;35m";  // PURPLE
         public static final String CYAN = "\033[0;36m";    // CYAN
         public static final String WHITE = "\033[0;37m";   // WHITE
+    }
+
+    //Html Colors
+    public class HTML_Colors {
+        public static final String BLACK = "text-dark";
+        public static final String RED = "text-danger";
+        public static final String GREEN = "text-success";
+        public static final String YELLOW = "text-warning";
+        public static final String BLUE = "text-primary";
+        public static final String CYAN = "text-info";
+        public static final String WHITE = "text-white";
     }
 
     // Bold
